@@ -1,0 +1,25 @@
+---
+- name: Install Docker and Initialize Swarm
+  hosts: all
+  become: yes
+  tasks:
+    - name: Download Docker installation script
+      get_url:
+        url: https://get.docker.com
+        dest: /tmp/install-docker.sh
+        mode: '0755'
+
+    - name: Run Docker installation script
+      command: sh /tmp/install-docker.sh
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Initialize Docker Swarm
+      command: docker swarm init
+      register: swarm_init_output
+      changed_when: "'Swarm initialized' in swarm_init_output.stdout"
+...
