@@ -1,0 +1,13 @@
+---
+- name: download docker images from docker registory
+  hosts: all
+  tasks:
+    - name: download docker images
+      docker_image:
+        name: "{{item}}"
+        source: pull
+      with_items:
+        - nginx
+        - tomcat
+        - httpd
+...
